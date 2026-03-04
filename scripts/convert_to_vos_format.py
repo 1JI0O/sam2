@@ -25,7 +25,7 @@ import glob
 
 RAW_IMG_ROOT = "/data/haoxiang/data/airexo2/task_0013/train"
 MASK_ROOT    = "/data/haoxiang/data/airexo2_processed/task_0013"
-OUT_ROOT     = "/data/haoxiang/data/airexo2_processed/vos_finetune"
+OUT_ROOT     = "/data/haoxiang/data/airexo2_processed/sam2_finetune"
 CAM_DIR      = "cam_105422061350/color"
 
 for i in range(1, 51):

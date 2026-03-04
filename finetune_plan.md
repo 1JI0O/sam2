@@ -12,7 +12,7 @@ SAM2 官方仓库已内置完整训练框架（`training/`），支持 DAVIS/MOS
 
 ### 结论：推荐单模型
 
-一次微调，palettised PNG 中同时标注 arm（像素=1）和 gripper（像素=2），训练出一个能同时追踪两种对象的模型。
+一次微调，采用 MultiplePNG（`is_palette: false`）格式同时监督 arm 与 gripper，训练出一个能同时追踪两种对象的模型。
 
 | 维度 | 单模型（推荐） | 两模型（各训一次） |
 |------|--------------|-----------------|
@@ -53,7 +53,7 @@ Mask:    /data/haoxiang/data/airexo2_processed/task_0013/
 ```
 
 选用 `_ckpt_arm` 和 `_ckpt_gripper`（未膨胀，边界干净）。
-Mask 为黑白图（**黑色=背景 0，白色=mask区域 255**），将两张二值图合并为 palettised PNG：`0=背景，1=arm，2=gripper`。
+Mask 为黑白图（**黑色=背景 0，白色=mask区域 255**），保持为两个独立二值 PNG（arm 与 gripper），不做 palettised 合并。
 
 ---
 
@@ -298,7 +298,7 @@ with torch.inference_mode():
 | 训练入口 | `training/train.py` |
 | Trainer 核心 | `training/trainer.py` |
 | 数据集加载 | `training/dataset/vos_raw_dataset.py`（PNGRawDataset） |
-| Mask加载 | `training/dataset/vos_segment_loader.py`（PalettisedPNGSegmentLoader） |
+| Mask加载 | `training/dataset/vos_segment_loader.py`（MultiplePNGSegmentLoader） |
 | 参考配置（MOSE） | `sam2/configs/sam2.1_training/sam2.1_hiera_b+_MOSE_finetune.yaml` |
 | 预训练权重 | `checkpoints/sam2.1_hiera_base_plus.pt` |
 | **新建：转换脚本** | `scripts/convert_to_vos_format.py` |
@@ -311,6 +311,6 @@ with torch.inference_mode():
 | 风险 | 解决方案 |
 |------|---------|
 | 40GB OOM | 进一步降 `num_frames: 4`；或开启 `compile_image_encoder: False`（默认已关） |
-| arm/gripper mask 帧数不对齐 | 转换脚本中取三者最小帧数，并打印 WARNING |
+| arm/gripper mask 帧数不一致（低概率） | 当前数据理论上一一对齐；转换脚本保留 `min(...)` 与 WARNING 作为保险 |
 | 数据量少（50场景）导致过拟合 | 增大 `multiplier`，关注 val loss，早停 |
 | 推理时需要初始 prompt | SAM2 是 prompted model，推理时给第一帧点/框即可，之后自动传播 |
