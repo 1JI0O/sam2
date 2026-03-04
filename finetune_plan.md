@@ -19,7 +19,8 @@ Mask:    /data/haoxiang/data/airexo2_processed/task_0013/
          └── scene_XXXX_ckpt_gripper/ ← gripper mask（无膨胀）       ← Object 2
 ```
 
-选用 `_ckpt_arm` 和 `_ckpt_gripper`（未膨胀，边界干净），合并为 palettised PNG：`0=背景，1=arm，2=gripper`。
+选用 `_ckpt_arm` 和 `_ckpt_gripper`（未膨胀，边界干净）。
+Mask 为黑白图（**黑色=背景 0，白色=mask区域 255**），将两张二值图合并为 palettised PNG：`0=背景，1=arm，2=gripper`。
 
 ---
 
@@ -108,6 +109,7 @@ for i in range(1, 51):
               f"gripper={len(gripper_files)}, using first {n_frames} frames")
 
     for idx in range(n_frames):
+        # mask为黑白图：白色(255)=mask区域，黑色(0)=背景，> 0 即可得到 bool mask
         arm_mask     = np.array(Image.open(arm_files[idx]).convert("L")) > 0
         gripper_mask = np.array(Image.open(gripper_files[idx]).convert("L")) > 0
 
