@@ -23,9 +23,9 @@ scratch:
   num_epochs: 30
 
 dataset:
-  img_folder: /data/haoxiang/data/airexo2_processed/vos_finetune/JPEGImages
-  gt_folder:  /data/haoxiang/data/airexo2_processed/vos_finetune/Annotations
-  file_list_txt: /data/haoxiang/data/airexo2_processed/vos_finetune/train_list.txt
+  img_folder: /data/haoxiang/data/airexo2_processed/sam2_finetune/JPEGImages
+  gt_folder:  /data/haoxiang/data/airexo2_processed/sam2_finetune/Annotations
+  file_list_txt: /data/haoxiang/data/airexo2_processed/sam2_finetune/train_list.txt
   multiplier: 8
 
 # Video transforms
