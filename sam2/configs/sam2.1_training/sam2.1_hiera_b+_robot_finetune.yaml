@@ -222,7 +222,7 @@ trainer:
               multiplier: ${dataset.multiplier}
       shuffle: True
       num_workers: ${scratch.num_train_workers}
-      pin_memory: True
+      pin_memory: False
       drop_last: True
       collate_fn:
         _target_: training.utils.data_utils.collate_fn
@@ -319,7 +319,8 @@ trainer:
 launcher:
   num_nodes: 1
   gpus_per_node: 4
-  experiment_log_dir: null  # defaults to ./sam2_logs/${config_name}
+  # experiment_log_dir: null  # defaults to ./sam2_logs/${config_name}
+  experiment_log_dir: /data/haoxiang/logs/sam2_finetune/airexo_task0013
 
 # SLURM args (only needed for cluster jobs)
 submitit:
