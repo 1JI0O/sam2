@@ -1,0 +1,42 @@
+# ============================================================
+# mask pipeline 配置文件
+# 修改此文件以切换任务 / 场景及调整各项参数
+# ============================================================
+
+# --- 任务标识 ---
+task_name: "task_0012"
+scene_name: "scene_0001"
+
+# --- 路径 ---
+# 视频帧目录完整路径：{data_base_dir}/{task_name}/train/{scene_name}/cam_105422061350/color
+data_base_dir: "/data/haoxiang/data/airexo2"
+# SAM3 模型权重
+# sam3_checkpoint: "/data/haoxiang/sam3/models/facebook/sam3/sam3.pt"
+sam3_checkpoint: "/data/haoxiang/logs/sam2_finetune/airexo_task0013/checkpoints/checkpoint.pt"
+# 导出根目录：最终 mask 输出到 {export_base_dir}/{task_name}/{scene_name}
+export_base_dir: "/data/haoxiang/data/airexo2/task_0012/merged_masks"
+
+# --- 推理 ---
+cuda_visible_devices: "0,1,2,3"
+cuda_visible_devices_arm: "0,1"
+cuda_visible_devices_gripper: "2,3"
+apply_temporal_disambiguation: false
+
+# --- Object IDs ---
+arm_obj_id: 0        # 主臂（text bootstrap 自动分配，通常为 0）
+arm_obj_id_2: 1      # 第二臂（左臂）；设为 null 时为单臂模式
+gripper_left_obj_id: 2
+gripper_right_obj_id: 3
+
+# --- Session 1 — Arm text bootstrap ---
+arm_text_prompt: "robot and cable"
+arm_text_bootstrap_frame_index: 0
+
+# --- 可视化 ---
+vis_frame_stride: 30
+vis_max_plots: 10
+
+# --- 导出 / Merge ---
+export_arm_dilate_radius: 5       # arm mask 膨胀半径
+export_gripper_dilate_radius: 5    # gripper mask 膨胀半径（用于从 arm 中挖去 gripper 区域）
+export_log_every: 50
